@@ -183,9 +183,9 @@ void programmatic() {
   //chooses a new neopixel index and color value every interval
   if (endTime - startTime >= interval2) {
     i = random(27);
-    r = random(255);
-    g = random(255);
-    b = random(255);
+    r = random(155);
+    g = random(155);
+    b = random(155);
     startTime = millis();
   }
   strip.setPixelColor(i, r, g, b);
