@@ -34,7 +34,7 @@ char colors[3][3] {
 
 char frames[2][27] {
   {
-    // commented out frames represent all neopixels switching colors every frame 
+    // commented out the frames that represent all neopixels switching colors every frame 
     //    1,
     //    1, 0, 1,
     //    0, 1, 0, 1,
