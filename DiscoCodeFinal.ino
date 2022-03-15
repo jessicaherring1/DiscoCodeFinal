@@ -158,7 +158,7 @@ void button() {
 }
 
 
-// this is a animation is created through the use of two pre-defined frames
+// this creates an animation through the use of two pre-defined frames
   // it uses the frames to create the appearance of a spinning ball
 void framesFunc() {
   endTime = millis();
@@ -185,7 +185,7 @@ void framesFunc() {
 }
 
 
-//depicts a soft movement of colors by setting adjacent sets of neopixels to 
+//depicts a soft movement of colors by setting adjacent sets of neopixels to random colors every interval
 void programmatic() {
   endTime = millis();
   //chooses a new neopixel index and color value every interval
@@ -204,7 +204,7 @@ void programmatic() {
 
 
 // represents light reflecting off of a disco ball
-  // all neopixels are blue and every interval, a random neopixel is set to a random color, and then reset to blue
+  // All neopixels start blue. Each interval a random neopixel is set to a random color and then reset back to blue
 void extra() {
   //turns all of the neopixels blue only once at the very beggining
   while (start) {
@@ -226,6 +226,7 @@ void extra() {
   r = random(255);
   g = random(255);
   b = random(255);
+  
   //sets the pixel to a random color every interval as the boolean is set to true
   if (isOn) {
 
