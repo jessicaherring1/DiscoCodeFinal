@@ -27,13 +27,14 @@ char index[27] {
 };
 
 char colors[3][3] {
-  {0, 0, 255},
-  {255, 0, 0},
-  {0, 0, 0},
+  {0, 0, 255}, //blue
+  {255, 0, 0}, //red
+  {0, 0, 0}, //off
 };
 
 char frames[2][27] {
   {
+    // commented out frames represent all neopixels switching colors every frame 
     //    1,
     //    1, 0, 1,
     //    0, 1, 0, 1,
@@ -54,6 +55,7 @@ char frames[2][27] {
     //    0, 1, 0
     //  },
 
+    // new frames represent blocks of 3-5 neopixels changing every frame. This makes the movement more apparent through the diffusion screen
     1,
     1, 1, 0,
     1, 1, 0, 0,
@@ -76,30 +78,30 @@ char frames[2][27] {
 
 };
 
-//programatic
+//programatic function variables
 int i;
 int r;
 int g;
 int b;
 
-//extra
+//extra function variables
 boolean isOn;
 boolean start;
 
-//strandTest
+//strandTest function variables
 int color = 0; //0-255
-int colorTimer = 0;
-int colorInterval = 100;
+long colorTimer = 0;
+long colorInterval = 10;
 
-//timer
+//timers
 unsigned long startTime = millis();
 unsigned long endTime;
 long interval = 300;
 long interval2 = 50;
-long interval3 = 150;
+long interval3 = 200;
 
 //switch case
-int state = 4;
+int state = 1;
 
 
 void setup() {
@@ -118,6 +120,7 @@ void loop() {
 
   switch (state) {
     case 0:
+      // off state
       break;
 
     case 1:
@@ -132,12 +135,14 @@ void loop() {
       extra();
       break;
 
-//    case 4:
-//      strandTest();
-//      break;
+    case 4:
+      strandTest();
+      break;
   }
 }
 
+
+// checks to see if the button has been pressed, and if so, changes the state of the program
 void button() {
   bounce.update();
 
@@ -147,12 +152,14 @@ void button() {
     if (debouncedInput == HIGH) {
       strip.clear();
       strip.show();
-      state = (state + 1) % 4;
+      state = (state + 1) % 5;
     }
   }
 }
 
 
+// this is a animation is created through the use of two pre-defined frames
+  // it uses the frames to create the appearance of a spinning ball
 void framesFunc() {
   endTime = millis();
   if (endTime - startTime >= interval) {
@@ -178,6 +185,7 @@ void framesFunc() {
 }
 
 
+//depicts a soft movement of colors by setting adjacent sets of neopixels to 
 void programmatic() {
   endTime = millis();
   //chooses a new neopixel index and color value every interval
@@ -188,17 +196,21 @@ void programmatic() {
     b = random(155);
     startTime = millis();
   }
+  //sets two adjacent neopixels to the same color
   strip.setPixelColor(i, r, g, b);
   strip.setPixelColor(i + 1, r, g, b);
   strip.show();
 }
 
 
+// represents light reflecting off of a disco ball
+  // all neopixels are blue and every interval, a random neopixel is set to a random color, and then reset to blue
 void extra() {
   //turns all of the neopixels blue only once at the very beggining
   while (start) {
     for (int i = 0; i < 27; i++) {
-      strip.setPixelColor(i, 0, 0, 255);
+      //strip.setBrightness(25);
+      strip.setPixelColor(i, 0, 0, 100); //not a very bright blue
       strip.show();
     }
     start = false;
@@ -214,24 +226,25 @@ void extra() {
   r = random(255);
   g = random(255);
   b = random(255);
-  //sets the pixel to a random color
+  //sets the pixel to a random color every interval as the boolean is set to true
   if (isOn) {
 
     strip.setPixelColor(i, r, g, b);
-    //strip.setPixelColor(i+1, r, g, b);
     strip.show();
     isOn = false;
   }
   //resets the same pixel back to blue
   else {
-    strip.setPixelColor(i, 0, 0, 255);
-    //strip.setPixelColor(i+1, 0, 0, 255);
+    strip.setPixelColor(i, 0, 0, 100);
   }
 }
 
-/*void strandTest() {
-  endTime = millis();
-  if (endTime - colorTimer > colorInterval) {
+
+//cycles between colors at a slow rate causing a gradient effect 
+  // this is not my code! 
+  // credit: Zane Cochran
+void strandTest() {
+  if (millis() - colorTimer > colorInterval) {
     color = (color + 1) % 255;
     colorTimer = millis();
   }
@@ -242,6 +255,10 @@ void extra() {
   strip.show();
 }
 
+
+//helper function for the strandTest function above
+  // this is also not my code!
+  // credit: Zane Cochran
 uint32_t Wheel(byte WheelPos) {
   WheelPos = 255 - WheelPos;
   if (WheelPos < 85) {
@@ -253,4 +270,4 @@ uint32_t Wheel(byte WheelPos) {
   }
   WheelPos -= 170;
   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-}*/
+}
